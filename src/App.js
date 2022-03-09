@@ -10,6 +10,7 @@ import MainLayout from './Components/MainLayout/MainLayout';
 import Pos from './Components/POS/Pos';
 import ProductAdd from './Components/Product/ProductAdd';
 import ProductEdit from './Components/Product/ProductEdit';
+import User from './Components/User/User';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route exact path='/productadd'  element={<ProductAdd/>}/>
           <Route exact path='/productedit' element={<ProductEdit/>}/>
           <Route exact path='/pos' element={<Pos/>}/>
+          <Route exact path='/user' element={<User/>}></Route>
           </Route>
         </Routes>
       </BrowserRouter>

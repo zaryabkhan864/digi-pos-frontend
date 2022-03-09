@@ -1,4 +1,9 @@
-import React,{useState,useEffect} from 'react'
+import React,{ useEffect } from 'react'
+import { useDispatch,useSelector } from 'react-redux'
+import { getProducts } from '../../Services/Actions/ProductActions'
+
+
+
 import PropTypes from 'prop-types';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -15,12 +20,9 @@ import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
-import { Button, ButtonGroup, TextField } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
-import { getProducts, updateQuantity } from '../../Services/Actions/ProductActions';
-
-
-
+import { Button, Link } from '@mui/material';
+import { useLocation, useNavigate,useHistory } from 'react-router-dom';
+import ProductEdit from './ProductEdit';
 
 
 
@@ -89,12 +91,29 @@ function createData(name, calories, fat) {
   return { name, calories, fat };
 }
 
+const rows = [
+  createData('Cupcake', 305, 3.7),
+  createData('Donut', 452, 25.0),
+  createData('Eclair', 262, 16.0),
+  createData('Frozen yoghurt', 159, 6.0),
+  createData('Gingerbread', 356, 16.0),
+  createData('Honeycomb', 408, 3.2),
+  createData('Ice cream sandwich', 237, 9.0),
+  createData('Jelly Bean', 375, 0.0),
+  createData('KitKat', 518, 26.0),
+  createData('Lollipop', 392, 0.2),
+  createData('Marshmallow', 318, 0),
+  createData('Nougat', 360, 19.0),
+  createData('Oreo', 437, 18.0),
+].sort((a, b) => (a.calories < b.calories ? -1 : 1));
 
 
+const PosCheck = () => {
+
+  const navigate = useNavigate();
+  // const history = useHistory();
 
 
-
-const PosListView = ({ data, setData }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -111,80 +130,56 @@ const PosListView = ({ data, setData }) => {
     setPage(0);
   };
 
+    const dispatch = useDispatch(); 
+
+    const {loading, products, error, productCount} = useSelector(state => state.products);
+
+    useEffect(()=>{
+         dispatch(getProducts());
+     
+    },[dispatch])
+
   
-  const add = (productId) => {
-    console.log({productId})
+    const editPage = (e)=>{
+    
+      const productId =  e.target.value
 
-    // console.log(`my price is ${price}`)
-    const obj = rows.find(r => r._id === productId);
-    if (!obj)
-    console.log(rows);
-    setData(
-      [...data, obj]
-    )
-    // console.log(`product id = ${productId}`)
-    console.log(`my data = ${data}`)
+        console.log(productId);
+        navigate("/productedit/",{ state:{productId }});
+     }
 
-  }
 
-  const dispatch = useDispatch();
-
-  const { loading, products, error, productCount } = useSelector(state => state.products);
-  console.log(products)
-
-  useEffect(() => {
-    dispatch(getProducts());
-
-  }, [dispatch])
-  useEffect(() => {
-    const originalRows = products.sort((a, b) => (a.calories < b.calories ? -1 : 1)); 
-    setRows(originalRows)
-  }, [products]);
-
-  const [rows, setRows] = useState([])
-
-  const [num,setNum] = useState(0);
-
-  const incNum = (index, row) =>{
-    const quantity = row.quantity ? row.quantity + 1 : 1;
-   dispatch(updateQuantity(index,quantity))  }
-
-   const decNum = (index, row) =>{
-    const quantity = row.quantity ? row.quantity - 1 : 1;
-   dispatch(updateQuantity(index,quantity))  }
 
   return (
     <TableContainer component={Paper}>
     <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
       <TableBody>
-        {(rowsPerPage > 0
-          ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-          : rows
-        ).map((row, index) => (
+        {
+        // (rowsPerPage > 0
+        //   ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+        //   : rows
+        // )
+        products.map((row) => (
           <TableRow key={row.name}>
             <TableCell component="th" scope="row">
               {row.name}
+              
             </TableCell>
             <TableCell style={{ width: 160 }} align="right">
               {row.price}
             </TableCell>
             <TableCell style={{ width: 160 }} align="right">
-              {row.stock - row.quantity}
+              {row.category}
             </TableCell>
             <TableCell style={{ width: 160 }} align="right">
-                <ButtonGroup variant="contained" aria-label="outlined primary button group">
-                  <Button onClick={() => incNum(index, row)}>+</Button>
-                  <TextField id="filled-basic"  variant="filled" value={row.quantity || 0}></TextField>
-                  <Button onClick={() => decNum(index, row)}>-</Button>
-                </ButtonGroup>
-              </TableCell>
-              
-              <TableCell style={{ width: 160 }} align="right">
-                  <Button variant="contained" color="success" onClick={() => add(row._id)} value={row}  >+</Button>
-                </TableCell>
-
+              {row.stock}
+            </TableCell>
+            <TableCell style={{ width: 160 }} align="right">
+              {console.log(row._id)}
+              <Button onClick={editPage} value={row._id}>Edit</Button>
+              {/* <Link to='/productedit'>Edit..</Link> */}
+            </TableCell>
           </TableRow>
-          
         ))}
 
         {emptyRows > 0 && (
@@ -218,4 +213,4 @@ const PosListView = ({ data, setData }) => {
   )
 }
 
-export default PosListView
+export default PosCheck

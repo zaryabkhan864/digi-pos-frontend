@@ -101,7 +101,10 @@ const MainLayout = props => {
             text: 'POS',
             onclick:'/pos'
         },
-    
+        {
+          text: 'User',
+          onclick:'/user'
+      },
       ];
   return (
     <Box sx={{ display: 'flex' }}>

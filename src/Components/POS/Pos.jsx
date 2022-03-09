@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState,useEffect } from 'react'
 import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
 import { Grid, Paper } from '@mui/material';
@@ -15,6 +15,10 @@ import PosButton from './PosButton';
 import PosPayment from './PosPayment';
 
 
+// import { useDispatch, useSelector } from 'react-redux';
+// import { getProducts } from '../../Services/Actions/ProductActions';
+
+
 const bull = (
   <Box
     component="span"
@@ -25,21 +29,42 @@ const bull = (
 );
 
 
+
 const Pos = () => {
+
+
+  // const dispatch = useDispatch();
+
+  // const { loading, products, error, productCount } = useSelector(state => state.products);
+  // console.log(products)
+
+  // useEffect(() => {
+  //   dispatch(getProducts());
+
+  // }, [dispatch])
+
+
+
+
+const [data,setData]=React.useState([])
+console.log(data)
+
+
+
   return (
     <React.Fragment>
       <Container maxWidth="xl">
         <Grid container spacing={2}> 
-          <Grid item lg={5}>
+          <Grid item lg={6} md={12}>
             <Paper>
-              <PosPayment/>
+            <PosListView data={data} setData={setData} />
             </Paper>
 
           </Grid>
-          <Grid item lg={7}>
+          <Grid item lg={6} md={12}>
             <Paper>
+            <PosPayment data={data} />
              
-              <PosListView/>
              
             </Paper>
 

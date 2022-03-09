@@ -8,41 +8,52 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
 
-const TAX_RATE = 0.07;
 
-function ccyFormat(num) {
-  return `${num.toFixed(2)}`;
+//data ->paper
+const PosPayment = ({data}) => {
+
+  console.log(data)
+
+  const TAX_RATE = 0.07;
+
+  function ccyFormat(num) {
+    return `${num.toFixed(2)}`;
+  }
+  
+  function priceRow(qty, unit) {
+    return qty * unit;
+  }
+  
+  function createRow(desc, qty, unit) {
+    const price = priceRow(qty, unit);
+    return { desc, qty, unit, price };
+  }
+  
+  function subtotal(items) {
+    return items.map(({ price }) => price).reduce((sum, i) => sum + i, 0);
+  }
+  const newData = data.map(({ name: name, price: price,quantity:quantity }) => ({name, price,quantity}));
+ 
+
+
+let newArray = [] 
+for(let i = 0 ;i<newData.length;i++)
+{
+
+ newArray.push(createRow(newData[i].name, newData[i].quantity, newData[i].price))
+
 }
 
-function priceRow(qty, unit) {
-  return qty * unit;
-}
+const rows =newArray;
+  
 
-function createRow(desc, qty, unit) {
-  const price = priceRow(qty, unit);
-  return { desc, qty, unit, price };
-}
-
-function subtotal(items) {
-  return items.map(({ price }) => price).reduce((sum, i) => sum + i, 0);
-}
-
-const rows = [
-  createRow('Paperclips (Box)', 100, 1.15),
-  createRow('Paper (Case)', 10, 45.99),
-  createRow('Waste Basket', 2, 17.99),
-  createRow('zaryab', 10, 20.00),
-];
-
-const invoiceSubtotal = subtotal(rows);
-const invoiceTaxes = TAX_RATE * invoiceSubtotal;
-const invoiceTotal = invoiceTaxes + invoiceSubtotal;
-
-
-const PosPayment = () => {
+  
+  const invoiceSubtotal = subtotal(rows);
+  const invoiceTaxes = TAX_RATE * invoiceSubtotal;
+  const invoiceTotal = invoiceTaxes + invoiceSubtotal;
   return (
     <TableContainer component={Paper}>
-    <Table sx={{ minWidth: 700 }} aria-label="spanning table">
+    <Table sx={{ minWidth: 500 }} aria-label="spanning table">
       <TableHead>
         <TableRow>
           <TableCell align="center" colSpan={3}>
