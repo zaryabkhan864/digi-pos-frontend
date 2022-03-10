@@ -12,8 +12,9 @@ const ProductEdit = (props) => {
   // console.log(`my id is: ${props.productId}`)
   const dispatch = useDispatch();
 
-  // const { loading, product, error, productCount } = useSelector(state => state.product);
-  // console.log(products)
+  // const { loading, product, error, productCount } = useSelector(state => state.productsFind);
+
+  // console.log(product)
   useEffect(() => {
     dispatch(getProductsbyFind(myvariable));
   }, [dispatch])
@@ -25,7 +26,7 @@ const ProductEdit = (props) => {
       'Content-Type': 'application/json'
     }
   }
-  const [product, setProduct] = useState({
+  const [products, setProducts] = useState({
     name: "",
     price: "",
     description: "",
@@ -48,14 +49,14 @@ const ProductEdit = (props) => {
   //for submit data
   const productSubmit = () => {
 
-    const { name, price, description, category, seller, stock, numOfReviews } = product
-    console.log(product)
+    const { name, price, description, category, seller, stock, numOfReviews } = products
+    console.log(products)
     if (name && price && description && category && seller && stock && numOfReviews) {
 
-      console.log(product)
+      console.log(products)
       try {
         console.log('1')
-        axios.post("/api/v1/admin/product/new", product, config)
+        axios.post("/api/v1/admin/product/new", products, config)
           .then((res) => {
             console.log(res.data)
             alert('data submitted...')
@@ -113,18 +114,18 @@ const ProductEdit = (props) => {
         <Grid container >
           <Grid item lg={12} sx={{ justifyContent: 'center', display: 'flex' }}>
             <Paper>
-              <TextField id="outlined-basic" label="Name" variant="outlined" name="name" value={product.name} onChange={handleChange} />
-              <TextField id="outlined-basic" label="Price" variant="outlined" name="price" value={product.price} onChange={handleChange} />
-              <TextField id="outlined-basic" label="Description" variant="outlined" name="description" value={product.description} onChange={handleChange} />
-              <TextField id="outlined-basic" label="Raiting" variant="outlined" name="ratings" value={product.ratings} onChange={handleChange} />
+              <TextField id="outlined-basic" label="Name" variant="outlined" name="name" value={products.name} onChange={handleChange} />
+              <TextField id="outlined-basic" label="Price" variant="outlined" name="price" value={products.price} onChange={handleChange} />
+              <TextField id="outlined-basic" label="Description" variant="outlined" name="description" value={products.description} onChange={handleChange} />
+              <TextField id="outlined-basic" label="Raiting" variant="outlined" name="ratings" value={products.ratings} onChange={handleChange} />
               {/* <TextField id="outlined-basic" label="Image" variant="outlined" name="Image" value={product.Image} onChange={handleChange}/> */}
 
             </Paper>
             <Paper>
-              <TextField id="outlined-basic" label="Category" variant="outlined" name="category" value={product.category} onChange={handleChange} />
-              <TextField id="outlined-basic" label="Seller" variant="outlined" name="seller" value={product.seller} onChange={handleChange} />
-              <TextField id="outlined-basic" label="Stock" variant="outlined" name="stock" value={product.ttock} onChange={handleChange} />
-              <TextField id="outlined-basic" label="Num of Reviews" variant="outlined" name="numOfReviews" value={product.numOfReviews} onChange={handleChange} />
+              <TextField id="outlined-basic" label="Category" variant="outlined" name="category" value={products.category} onChange={handleChange} />
+              <TextField id="outlined-basic" label="Seller" variant="outlined" name="seller" value={products.seller} onChange={handleChange} />
+              <TextField id="outlined-basic" label="Stock" variant="outlined" name="stock" value={products.ttock} onChange={handleChange} />
+              <TextField id="outlined-basic" label="Num of Reviews" variant="outlined" name="numOfReviews" value={products.numOfReviews} onChange={handleChange} />
               {/* <TextField id="outlined-basic" label="Reviews" variant="outlined" name="reviews" value={product.reviews} onChange={handleChange}/> */}
             </Paper>
             <Paper>
